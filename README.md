@@ -73,7 +73,7 @@ The script will ask if you want to upload. If you choose no, it prints the exact
 
 ### 4. Deploy
 
-Open the rewritten URL in your browser. It will pre-fill all parameters in the CloudFormation console. Review and click **Create stack**.
+Open the rewritten URL in your browser. It will pre-fill all parameters in the CloudFormation console, including the stack name **`CrowdStrike-Integration`**. Review and click **Create stack**.
 
 ## IAM permissions granted
 
