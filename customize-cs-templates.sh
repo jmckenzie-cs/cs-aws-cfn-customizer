@@ -211,6 +211,9 @@ POLICY_BLOCK='      Policies:
                   - organizations:List*
                   - events:Describe*
                   - events:List*
+                  - ssm:DescribeInstanceInformation
+                  - ssm:GetInventory
+                  - ssm:ListInventoryEntries
           PolicyName: cspm_least_privilege'
 
 # Replace from ManagedPolicyArns: through PolicyName: cspm_config (inclusive).
@@ -228,7 +231,7 @@ fi
 
 echo "$patched_inv" > "$INVENTORY_OUT"
 ok "Removed SecurityAudit managed policy + cspm_config inline policy"
-ok "Inserted cspm_least_privilege policy (16 actions)"
+ok "Inserted cspm_least_privilege policy (19 actions)"
 
 # ── Step 6: Falcon URL rewrite ────────────────────────────────────────────────
 echo
