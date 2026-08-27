@@ -11,13 +11,14 @@ set -euo pipefail
 #   ./customize-cs-templates.sh [OPTIONS]
 #
 # Options:
-#   --bucket <name>       S3 bucket name to host the templates
-#   --region <region>     Bucket region (default: auto-detect via AWS CLI)
-#   --falcon-url <url>    Falcon console launch URL to rewrite
-#   --upload              Upload patched templates to S3 without prompting
-#   --output-dir <dir>    Directory to write patched templates (default: .)
-#   --force               Overwrite existing output files
-#   --help                Show this help
+#   --bucket <name>          S3 bucket name to host the templates
+#   --region <region>        Bucket region (default: auto-detect via AWS CLI)
+#   --falcon-url <url>       Falcon console launch URL to rewrite
+#   --falcon-url-file <path> File containing the Falcon launch URL (avoids shell line-length limits)
+#   --upload                 Upload patched templates to S3 without prompting
+#   --output-dir <dir>       Directory to write patched templates (default: .)
+#   --force                  Overwrite existing output files
+#   --help                   Show this help
 # ══════════════════════════════════════════════════════════════════════════════
 
 # ── Constants ─────────────────────────────────────────────────────────────────
@@ -36,6 +37,7 @@ info() { echo -e "${BOLD}$*${RESET}"; }
 BUCKET=""
 REGION=""
 FALCON_URL=""
+FALCON_URL_FILE=""
 DO_UPLOAD=""
 OUTPUT_DIR="."
 FORCE=false
@@ -43,12 +45,13 @@ FORCE=false
 # ── Arg parsing ───────────────────────────────────────────────────────────────
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --bucket)     BUCKET="$2";     shift 2 ;;
-    --region)     REGION="$2";     shift 2 ;;
-    --falcon-url) FALCON_URL="$2"; shift 2 ;;
-    --upload)     DO_UPLOAD=true;  shift   ;;
-    --output-dir) OUTPUT_DIR="$2"; shift 2 ;;
-    --force)      FORCE=true;      shift   ;;
+    --bucket)          BUCKET="$2";          shift 2 ;;
+    --region)          REGION="$2";          shift 2 ;;
+    --falcon-url)      FALCON_URL="$2";      shift 2 ;;
+    --falcon-url-file) FALCON_URL_FILE="$2"; shift 2 ;;
+    --upload)          DO_UPLOAD=true;       shift   ;;
+    --output-dir)      OUTPUT_DIR="$2";      shift 2 ;;
+    --force)           FORCE=true;           shift   ;;
     --help)
       sed -n '/^# Usage:/,/^# ══/p' "$0" | grep -v '^# ══' | sed 's/^# //'
       exit 0 ;;
@@ -232,8 +235,16 @@ ok "Inserted cspm_least_privilege policy (16 actions)"
 echo
 info "── Falcon Console Launch URL ────────────────────────────────────────────"
 
+# Load from file if provided (avoids shell line-length limits when pasting long URLs)
+if [[ -n "$FALCON_URL_FILE" ]]; then
+  [[ -f "$FALCON_URL_FILE" ]] || { err "File not found: $FALCON_URL_FILE"; exit 1; }
+  FALCON_URL=$(tr -d '[:space:]' < "$FALCON_URL_FILE")
+fi
+
 if [[ -z "$FALCON_URL" ]]; then
   echo "  Paste the launch URL from the Falcon console onboarding workflow."
+  echo "  TIP: If the URL is too long to paste, save it to a file and use:"
+  echo "       --falcon-url-file <path>"
   echo "  Press Enter to skip."
   read -rp "  URL: " FALCON_URL
 fi
