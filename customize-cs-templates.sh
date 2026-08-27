@@ -187,13 +187,13 @@ echo
 info "── Patching $INVENTORY_TEMPLATE ────────────────────────────────────────"
 
 # Embedded least-privilege policy block (indentation matches the upstream file).
-read -r -d '' POLICY_BLOCK << 'POLICY' || true
-      Policies:
+# Note: defined as a literal string (not heredoc) to preserve leading whitespace.
+POLICY_BLOCK='      Policies:
         - PolicyDocument:
-            Version: '2012-10-17'
+            Version: '"'"'2012-10-17'"'"'
             Statement:
               - Effect: Allow
-                Resource: '*'
+                Resource: '"'"'*'"'"'
                 Action:
                   - cloudformation:DescribeStacks
                   - cloudformation:DescribeStackResources
@@ -211,8 +211,7 @@ read -r -d '' POLICY_BLOCK << 'POLICY' || true
                   - organizations:List*
                   - events:Describe*
                   - events:List*
-          PolicyName: cspm_least_privilege
-POLICY
+          PolicyName: cspm_least_privilege'
 
 # Replace from ManagedPolicyArns: through PolicyName: cspm_config (inclusive).
 patched_inv=$(REPL="$POLICY_BLOCK" perl -0777 -pe \
