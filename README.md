@@ -15,6 +15,23 @@ Patches CrowdStrike's CloudFormation onboarding templates to use a least-privile
 - `curl` and `perl` (both included on macOS and most Linux distros)
 - AWS CLI (only required for region auto-detect and uploading)
 
+## Download
+
+Clone the repo:
+```bash
+git clone https://github.com/jmckenzie-cs/cs-aws-cfn-customizer.git
+cd cs-aws-cfn-customizer
+chmod +x customize-cs-templates.sh
+```
+
+Or download just the script:
+```bash
+curl -O https://raw.githubusercontent.com/jmckenzie-cs/cs-aws-cfn-customizer/main/customize-cs-templates.sh
+chmod +x customize-cs-templates.sh
+```
+
+> **Note:** This repo is private. You must be authenticated with GitHub to download it. Run `gh auth login` if you haven't already.
+
 ## Usage
 
 ```bash
