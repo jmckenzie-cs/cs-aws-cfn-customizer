@@ -211,6 +211,17 @@ POLICY_BLOCK='      Policies:
                   - organizations:List*
                   - events:Describe*
                   - events:List*
+                  - lambda:GetAccountSettings
+                  - lambda:GetEventSourceMapping
+                  - lambda:GetFunction
+                  - lambda:GetFunctionCodeSigningConfig
+                  - lambda:GetFunctionConfiguration
+                  - lambda:GetFunctionUrlConfig
+                  - lambda:GetLayerVersion
+                  - lambda:GetLayerVersionPolicy
+                  - lambda:GetPolicy
+                  - lambda:List*
+                  - lambda:GetLayerVersion
           PolicyName: cspm_least_privilege'
 
 # Replace from ManagedPolicyArns: through PolicyName: cspm_config (inclusive).
