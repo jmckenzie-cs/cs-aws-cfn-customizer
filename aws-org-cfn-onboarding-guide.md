@@ -49,7 +49,7 @@ Because only asset inventory is enabled, the customizer's caveat (it repoints on
 - [ ] No accounts in the org already registered individually (deprovision them first; an org can be registered to only one CID)
 - [ ] If SCPs block regions: allow these IAM calls to us-east-1 for the reader role: `iam:ListAttachedRolePolicies`, `GetRolePolicy`, `GetPolicy`, `ListAccountAliases`, `ListRolePolicies`, `GetPolicyVersion`
 - [ ] If you restrict by IP: add CrowdStrike IP ranges to allowlists
-- [ ] Everything runs in **AWS CloudShell** (no local tools needed). It provides `aws`, `curl`, `perl`. A copy of the script from the private repo (see Phase 1 step 3)
+- [ ] Everything runs in **AWS CloudShell** (no local tools needed). It provides `aws`, `curl`, `perl`. A copy of the script from the public repo (see Phase 1 step 3)
 
 ---
 
@@ -71,12 +71,12 @@ Because only asset inventory is enabled, the customizer's caveat (it repoints on
        --create-bucket-configuration LocationConstraint=<region>
      ```
    - Keep Block Public Access on. The deploying principal needs `s3:GetObject` on the bucket (inferred from how CloudFormation works, not from the README; verify in Phase 3). Pick a region your SCPs allow.
-3. Get the script into CloudShell. The repo is private and CloudShell has no `gh`, so pick one:
-   - **Upload (simplest):** on your workstation, download `customize-cs-templates.sh` (`gh repo clone jmckenzie-cs/cs-aws-cfn-customizer`, or download the file from GitHub). In CloudShell choose **Actions > Upload file** and select it. Then:
-     ```bash
-     chmod +x customize-cs-templates.sh
-     ```
-   - **Clone with a token:** use a short-lived, read-only fine-grained GitHub token scoped to this repo (`git clone https://github.com/jmckenzie-cs/cs-aws-cfn-customizer.git`, enter the token as the password), then revoke the token. Run `cd cs-aws-cfn-customizer` and `chmod +x customize-cs-templates.sh`.
+3. Get the script into CloudShell. The repo is public, so no authentication is needed:
+   ```bash
+   git clone https://github.com/jmckenzie-cs/cs-aws-cfn-customizer.git
+   cd cs-aws-cfn-customizer
+   chmod +x customize-cs-templates.sh
+   ```
 
 What the script does: downloads the latest CrowdStrike templates, replaces the `SecurityAudit` managed policy and ~140-action inline policy on `CrowdStrikeCSPMReaderRole` with a 16-action inline policy, rewrites nested `TemplateURL`s to your bucket, rewrites the launch URL's `templateURL=`, and optionally uploads.
 
@@ -143,7 +143,7 @@ Resulting reader role permissions (for your security review):
 - [ ] `ReaderRoleArn`
 
 ### Cleanup
-- In CloudShell, delete the script and the patched templates it wrote to the current directory (check with `ls`). CloudShell's home directory persists between sessions, so don't leave them there. Revoke any GitHub token used.
+- In CloudShell, delete the script and the patched templates it wrote to the current directory (check with `ls`). CloudShell's home directory persists between sessions, so don't leave them there.
 - Scrub the URL from chat/tickets.
 - Keep the S3 bucket; stack updates still reference it.
 
@@ -174,7 +174,6 @@ New accounts added to the org/OUs register automatically.
 | Symptom | Likely cause / action |
 |---|---|
 | Template can't be retrieved at stack creation | Deploying principal lacks `s3:GetObject`, or the bucket region is blocked by an SCP |
-| Can't get the repo in CloudShell | Private repo and no `gh`: use Actions > Upload file, or a read-only token |
 | Pasted link truncated at the prompt | Save it to a file and use `--falcon-url-file` |
 | Bucket created in wrong region | CloudShell defaults to its own region; pass `--region` explicitly |
 | StackSet failure | Trusted access not enabled, or not signed in to the management/delegated admin account |

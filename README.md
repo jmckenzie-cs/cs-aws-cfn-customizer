@@ -20,19 +20,19 @@ For the full two-person runbook (Falcon Admin + AWS Admin, quick setup, asset in
 
 ## Download
 
-This repo is private and CloudShell has no `gh`, so pick one:
+The repo is public, so CloudShell can fetch it directly (`gh` isn't needed):
 
-- **Upload (simplest):** on your workstation, run `gh repo clone jmckenzie-cs/cs-aws-cfn-customizer` (or download `customize-cs-templates.sh` from GitHub). In CloudShell choose **Actions > Upload file**, then:
-  ```bash
-  chmod +x customize-cs-templates.sh
-  ```
-- **Clone with a token:** use a short-lived, read-only fine-grained GitHub token scoped to this repo:
-  ```bash
-  git clone https://github.com/jmckenzie-cs/cs-aws-cfn-customizer.git
-  cd cs-aws-cfn-customizer
-  chmod +x customize-cs-templates.sh
-  ```
-  Enter the token as the password, then revoke it.
+```bash
+git clone https://github.com/jmckenzie-cs/cs-aws-cfn-customizer.git
+cd cs-aws-cfn-customizer
+chmod +x customize-cs-templates.sh
+```
+
+Or download just the script:
+```bash
+curl -O https://raw.githubusercontent.com/jmckenzie-cs/cs-aws-cfn-customizer/main/customize-cs-templates.sh
+chmod +x customize-cs-templates.sh
+```
 
 ## Usage
 
@@ -105,7 +105,7 @@ Open the rewritten URL in a new browser tab, signed in to the same management (o
 
 ### 5. Clean up
 
-CloudShell's home directory persists between sessions. Delete the script, the patched templates and any saved URL file (`ls` to check), and revoke any GitHub token used. Keep the S3 bucket: stack updates still reference it.
+CloudShell's home directory persists between sessions. Delete the script, the patched templates and any saved URL file (`ls` to check). Keep the S3 bucket: stack updates still reference it.
 
 ## IAM permissions granted
 
