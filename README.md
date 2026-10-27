@@ -16,7 +16,7 @@ Patches CrowdStrike's CloudFormation onboarding templates to use a least-privile
 - AWS CLI (only required for region auto-detect and uploading)
 - Intended to run in **AWS CloudShell**, signed in to the management (or delegated admin) account. No local tools needed.
 
-For the full two-person runbook (Falcon Admin + AWS Admin, quick setup, asset inventory + IOM only), see [aws-org-cfn-onboarding-guide.md](aws-org-cfn-onboarding-guide.md).
+For the full two-person runbook (Falcon Admin + AWS Admin, quick setup, asset inventory + IOM only), see [aws-org-cfn-onboarding-guide-v2.md](aws-org-cfn-onboarding-guide-v2.md).
 
 ## Download
 
